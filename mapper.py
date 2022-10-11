@@ -13,7 +13,7 @@ class Mapper():
         self._operation = operation.Operation()
 
     def scan(self, expression:str):
-        expression = expression.strip().replace(",", ".")
+        expression = expression.strip().replace(",", ".").replace(" ","")
 
         while expression.find('(') != -1:
             # maps first elements
@@ -42,37 +42,27 @@ class Mapper():
         return self._operation
 
     def _map_simple(self, sub):
-        splits = sub.strip().split(' ')
+        splits = []
+        acc = ""
+        for l in sub:
+            if l in OPERATORS:
+                add_ope = True
+                if len(acc) > 0:
+                    splits.append(value.Value(acc))
+                    acc = ""
+                elif len(splits)>0 and splits[len(splits)-1].is_operand() and l != '-':
+                    raise SyntaxError()
+                elif ((len(splits)>0 and splits[len(splits)-1].is_operand()) or len(splits) == 0) and l == '-':
+                    acc += "-"
+                    add_ope = False
 
-        for s in splits:
-            if s in OPERATORS:
-                self._operation.append(operand.Operand(s))
-            elif '^' in s:
-                self._map_expo(s)
+                if add_ope:
+                    splits.append(operand.Operand(l))
             else:
-                self._operation.append(value.Value(s))
+                acc += l
 
-    def _map_expo(self, expo):
+        if len(acc) > 0:
+            splits.append(value.Value(acc))
 
-        expression = expo
-
-        if expression.find('^') > 0:
-            expo_ope = operation.Operation()
-            if expression[0] == '-':
-                expo_ope.append(value.Value('-1'))
-                expo_ope.append(operand.Operand('*'))
-                expression = expo[1:]
-
-            expo_ope.append(value.Value(expression[:expression.find('^')]))
-
-            expo_ope.append(operand.Operand('^'))
-
-            if expression.find('^') < (len(expression)-1):
-                expo_ope.append(value.Value(expression[expression.find('^')+1:]))
-
-            self._operation.append(expo_ope)
-        else:
-            self._operation.append(operand.Operand('^'))
-
-            if expression.find('^') < len(expression):
-                self._operation.append(value.Value(expression[expression.find('^')+1:]))
+        for b in splits:
+            self._operation.append(b)

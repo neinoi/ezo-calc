@@ -29,5 +29,6 @@ class Operand(bloc.Bloc):
     def is_second(self):
         return self._opcode in ['*','/']
 
-#    def get_value(self) -> Number:
-#        return self._opcode
+
+    def is_operand(self):
+        return True

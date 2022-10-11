@@ -7,3 +7,6 @@ class Bloc:
     def get_value(self) -> Number:
         """Returns value of the bloc (direct value or calculation)"""
         pass
+
+    def is_operand(self):
+        return False

@@ -10,7 +10,10 @@ class Value(bloc.Bloc):
     _value: Decimal
 
     def __init__(self, value):
-        self._value = Decimal(value)
+        try:
+            self._value = Decimal(value)
+        except InvalidOperation:
+            raise SyntaxError(f'Invalid value : {value}')
 
     def get_value(self) -> Number:
         return self._value
