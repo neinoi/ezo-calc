@@ -126,18 +126,19 @@ class TestSum(unittest.TestCase):
 
         self.assertEqual(calc_tree.get_value(), 1279)
 
-    # Fonction non implementee : remplacee par "4^(1/2)
-    # def test_13(self):
-    #     calcul = "sqrt(4)"
-    #     calcmap = mapper.Mapper()
-    #
-    #     print("CALCUL : ", calcul)
-    #
-    #     calc_tree = calcmap.scan(calcul)
-    #
-    #     self.assertEqual(calc_tree.get_value(), 2)
+    def test_13a(self):
+        # sqrt non implementee
+        # calcul = "sqrt(4)"
+        calcul = "4^(1/2)"
+        calcmap = mapper.Mapper()
 
-    def test_13(self):
+        print("CALCUL : ", calcul)
+
+        calc_tree = calcmap.scan(calcul)
+
+        self.assertEqual(calc_tree.get_value(), 2)
+
+    def test_13b(self):
         calcul = "4 ^ (1 / 2)"
         calcmap = mapper.Mapper()
 
@@ -160,6 +161,16 @@ class TestSum(unittest.TestCase):
             self.fail("Un erreur de division par 0 est attendue")
         except decimal.DivisionByZero:
             pass
+
+    def test_Complex(self):
+        calcul = "(9^(1/2)+3)*5.4"
+        calcmap = mapper.Mapper()
+
+        print("CALCUL : ", calcul)
+
+        calc_tree = calcmap.scan(calcul)
+
+        self.assertAlmostEqual(calc_tree.get_value(), 32.4)
 
 
 if __name__ == '__main__':
