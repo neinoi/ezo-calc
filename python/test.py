@@ -170,6 +170,16 @@ class TestSum(unittest.TestCase):
 
         calc_tree = calcmap.scan(calcul)
 
+        self.assertAlmostEqual(calc_tree.get_value(), decimal.Decimal(32.4))
+
+    def test_sqrt(self):
+        calcul = "sqrt(4)"
+        calcmap = mapper.Mapper()
+
+        print("CALCUL : ", calcul)
+
+        calc_tree = calcmap.scan(calcul)
+
         self.assertAlmostEqual(calc_tree.get_value(), 32.4)
 
 
